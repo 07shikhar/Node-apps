@@ -1,6 +1,10 @@
 const path = require('path')
 const express =  require('express')
 const hbs = require('hbs')
+const geocode = require('./utils/geocode')
+const forecast = require('./utils/forecast')
+const { RSA_NO_PADDING, RSA_PKCS1_OAEP_PADDING } = require('constants')
+const { error } = require('console')
 
 const publicDirectoryPath = path.join(__dirname, '../public') //to get the path in a variable
 const viewsPath = path.join(__dirname, '../templates/views')//path for the changed name of Views
@@ -37,13 +41,32 @@ app.get('/help', (req, res)=>{
 
 
 app.get('/weather',(req, res)=>{
-    res.send([{
-        name: 'Shikhar',
-        age: 27
-    },{
-        name: 'Mridul',
-        age: 18
-    }])
+    if(!req.query.address){
+        return res.send({
+            error: 'Cannot found'
+        })
+    }
+
+    geocode(req.query.address,(error, {lat, lon, name} = {})=>{
+        if(error){
+            return res.send({error})
+        }
+
+        forecast(lat, lon,(error, forecastData)=>{
+            if(error){
+                res.send({error})
+            }
+
+            res.send({
+                forecast: forecastData,
+                name,
+                address: req.query.address
+            })
+
+        })
+
+    })
+
 })
 
 app.get('/help/*', (req, res)=>{ //must come at the end. * is for any route except mentioned routes
