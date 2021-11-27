@@ -15,7 +15,7 @@ app.use(express.static(publicDirectoryPath)) //static ditrectory that gonna make
 
 app.set('view engine', 'hbs')
 app.set('views', viewsPath)//setting the path to the changed name
-hbs.registerPartials(partialPath)//path for patials
+hbs.registerPartials(partialPath)//path for partials
 
 
 

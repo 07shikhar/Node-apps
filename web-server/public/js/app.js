@@ -1,5 +1,3 @@
-console.log("Clinet Side")
-
 const weatherForm = document.querySelector('form') //get the HTML element in a variable
 const search = document.querySelector('input')
 const messageOne = document.querySelector('#message-1')
